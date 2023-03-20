@@ -20,30 +20,11 @@ if __name__ == '__main__':
     project_place_api_client = PPApiClient(config)
     agile_place_api_client = APApiClient(config)
 
-    boards_sync = BoardSync(project_place_api_client)
+    boards_sync = BoardSync(project_place_api_client, agile_place_api_client)
     project_place_data = boards_sync.get_pp_board_data(project_place_board_id)
 
     print(json.dumps(project_place_data))
 
-    for card in project_place_data:
-        title = card['title']
+    boards_sync.populate_agile_place_board(project_place_data, agile_place_board_id)
 
-        update_card_request = {
-            "boardId": agile_place_board_id,
-            "title": card['title'],
-            # "typeId": str(card['label_id']),
-            "assignedUserids": [],
-            "blockReason": card['is_blocked_reason'],
-            "customFields": [],
-            "description": card['description'],
-            "index": card['column'][0]['display_order'],
-            "isBlocked": card['is_blocked'],
-            # "tags": card['tags'],
-            # "laneId": str(card['column'][0]['display_order'])
-        }
 
-        print(update_card_request)
-
-        response = agile_place_api_client.create_new_card_with_properties(update_card_request)
-
-        print(response)

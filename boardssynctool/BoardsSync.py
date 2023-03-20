@@ -3,8 +3,9 @@ import json
 
 class BoardSync:
 
-    def __init__(self, pp_api_client):
+    def __init__(self, pp_api_client, ap_api_client):
         self.pp_api_client = pp_api_client
+        self.ap_api_client = ap_api_client
 
     def get_pp_board_data(self, board_id):
 
@@ -24,11 +25,12 @@ class BoardSync:
         cards_data = list()
 
         for column in columns:
-            columns_data[column['id']] = [{
+            columns_data[column['id']] = {
+                "column_id": column['id'],
                 "display_order": column['display_order'],
                 "name": column['name'],
                 "wip_limit": column['wip_limit']
-            }]
+            }
 
         for raw_card in cards_raw_data:
             card = dict()
@@ -58,3 +60,38 @@ class BoardSync:
             cards_data.append(card)
 
         return cards_data
+
+    def populate_agile_place_board(self, project_place_data, agile_place_board_id):
+
+        for card in project_place_data:
+
+            tags = []
+            if card['tags']:
+                for tag in card['tags']:
+                    tags.append(tag['name'])
+
+            lane = {
+                "index": card['column']['column_id'],
+                "orientation": "vertical",
+                "laneClassType": "active",
+                "laneType": "completed"
+            }
+
+            update_card_request = {
+                "boardId": agile_place_board_id,
+                "title": card['title'],
+                "assignedUserids": [],
+                "blockReason": card['is_blocked_reason'],
+                "customFields": [],
+                "description": card['description'],
+                "index": card['column']['column_id'],
+                "isBlocked": card['is_blocked'],
+                "tags": tags,
+                "lane": lane
+            }
+
+            print(update_card_request)
+
+            response = self.ap_api_client.create_new_card_with_properties(update_card_request)
+
+            print(response)
