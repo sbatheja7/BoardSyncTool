@@ -2,12 +2,13 @@ import json
 
 
 class BoardSync:
-
+    """The class is used for methods for board sync logic"""
     def __init__(self, pp_api_client, ap_api_client):
         self.pp_api_client = pp_api_client
         self.ap_api_client = ap_api_client
 
     def get_pp_board_data(self, board_id):
+        """Method to get the boards and cards data from the Project Place API using the board ID"""
 
         boards_raw_data = self.pp_api_client.get_board_data(board_id)
 
@@ -62,6 +63,7 @@ class BoardSync:
         return cards_data
 
     def populate_agile_place_board(self, project_place_data, agile_place_board_id):
+        """Method used to populate the Agile Place board using the data got from the Project Place"""
 
         for card in project_place_data:
 

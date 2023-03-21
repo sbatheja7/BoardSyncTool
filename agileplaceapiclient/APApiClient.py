@@ -3,6 +3,7 @@ import json
 
 
 class APApiClient:
+    """Class used to Agile Place API client"""
 
     def __init__(self, config):
         self.config = config

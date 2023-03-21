@@ -2,6 +2,7 @@ import http.client
 
 
 class PPApiClient:
+    """Class used for Project Place API client methods"""
 
     def __init__(self, config):
         print(config)
