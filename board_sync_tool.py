@@ -13,7 +13,7 @@ def read_config():
 if __name__ == '__main__':
 
     project_place_board_id = '1420409'
-    agile_place_board_id = '1895181389'
+    agile_place_board_id = '1897313155'
 
     config = read_config()
 
@@ -23,8 +23,4 @@ if __name__ == '__main__':
     boards_sync = BoardSync(project_place_api_client, agile_place_api_client)
     project_place_data = boards_sync.get_pp_board_data(project_place_board_id)
 
-    print(json.dumps(project_place_data))
-
     boards_sync.populate_agile_place_board(project_place_data, agile_place_board_id)
-
-
